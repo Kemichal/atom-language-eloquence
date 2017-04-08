@@ -1,0 +1,43 @@
+'scopeName': 'source.dlg'
+'name': 'dlg'
+'fileTypes': ['dlg','edlg']
+'patterns': [
+  {
+    'match': '\\#.*'
+    'name': 'comment.line.number-sign'
+  }
+  {
+    'begin': '([a-zA-Z0-9_.]+) ([a-zA-Z0-9_.]+) {'
+    'captures':
+      '1':
+        'name': 'entity.name.type'
+      '2':
+        'name': 'variable'
+    'end': '}'
+    'patterns': [
+      {
+        'match': '(\\.[a-zA-Z0-9_.]+) *= *(.*)'
+        'captures':
+          '1':
+            'name': 'entity.other.attribute-name'
+          '2':
+            'patterns': [
+              {
+                'match': '^(-*[0-9]+)'
+                'name': 'constant.numeric'
+              }
+              {
+                'begin': '"'
+                'end': '"'
+                'name': 'string.quoted.double'
+              }
+              {
+                'match': '[a-zA-Z0-9_]+(?=\\()'
+                'name': 'entity.name.function'
+              }
+            ]
+      }
+      'include': '$self'
+    ]
+  }
+]

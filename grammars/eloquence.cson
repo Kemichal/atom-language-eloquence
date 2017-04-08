@@ -1,0 +1,212 @@
+'scopeName': 'source.eq'
+'name': 'eloquence'
+'fileTypes': ['eq']
+'patterns': [
+  { # Class function definition
+    'begin': '(DEF FN)([A-Z][a-z0-9_]*)(:)([A-Z][a-z0-9_]*\\${0,1})'
+    'beginCaptures':
+      '1':
+        'name': 'keyword'
+      '2':
+        'name': 'storage.type'
+      '3':
+        'name': 'keyword.operator'
+      '4':
+        'name': 'entity.name.function'
+    'end': '(FNEND)'
+    'endCaptures':
+      '1':
+        'name': 'keyword'
+    'patterns': [
+      'include': '#common'
+    ]
+  }
+  { # Function definition
+    'begin': '(DEF FN)([A-Z][a-z0-9_]*\\${0,1})'
+    'beginCaptures':
+      '1':
+        'name': 'keyword'
+      '2':
+        'name': 'entity.name.function'
+    'end': '(FNEND)'
+    'endCaptures':
+      '1':
+        'name': 'keyword'
+    'patterns': [
+      'include': '#common'
+    ]
+  }
+  { # Class subroutine definition
+    'begin': '(SUB )([A-Z][a-z0-9_]*)(:)([A-Z][a-z0-9_]*\\${0,1})'
+    'beginCaptures':
+      '1':
+        'name': 'keyword'
+      '2':
+        'name': 'storage.type'
+      '3':
+        'name': 'keyword.operator'
+      '4':
+        'name': 'entity.name.function'
+    'end': '(SUBEND)'
+    'endCaptures':
+      '1':
+        'name': 'keyword'
+    'patterns': [
+      'include': '#common'
+    ]
+  }
+  { # Subroutine definition
+    'begin': '(?<!DEL )(?<!LOAD )(SUB )([A-Z][a-z0-9_]*)'
+    'beginCaptures':
+      '1':
+        'name': 'keyword'
+      '2':
+        'name': 'entity.name.function'
+    'end': '(SUBEND)'
+    'endCaptures':
+      '1':
+        'name': 'keyword'
+    'patterns': [
+      'include': '#common'
+    ]
+  }
+  'include': '#common'
+]
+'repository':
+  'common':
+    'patterns': [
+      { # Comment
+        'match': '!.*'
+        'name': 'comment.line'
+      }
+      { #  define_single_line_function
+        'match': '(DEF FN)([A-Z][a-z0-9]*\\${0,1})(?=.*=)'
+        'captures':
+          '1':
+            'name': 'keyword'
+          '2':
+            'name': 'entity.name.function'
+      }
+      { # call_class_function
+        'match': '(FNTHIS)(\\.)([A-Z][a-z0-9_]*\\${0,1})'
+        'captures':
+          '1':
+            'name': 'keyword'
+          '2':
+            'name': 'keyword.operator'
+          '3':
+            'name': 'entity.name.function'
+      }
+      { # call_function
+        'match': '(FN)([A-Z][a-z0-9_]*\\${0,1})'
+        'captures':
+          '1':
+            'name': 'keyword'
+          '2':
+            'name': 'entity.name.function'
+      }
+      { # call_class_subroutine
+        'match': '(CALL (?:THIS){0,1}\\.)([A-Z][a-z0-9_]*)'
+        'captures':
+          '1':
+            'name': 'keyword'
+          '2':
+            'name': 'keyword.operator'
+          '3':
+            'name': 'entity.name.function'
+      }
+      { # call_subroutine
+        'match': '(CALL DLL |LOAD DLL |CALL )([A-Z][a-z0-9_]*)'
+        'captures':
+          '1':
+            'name': 'keyword'
+          '2':
+            'name': 'entity.name.function'
+      }
+      { # TODO data
+        'begin': '(DATA )'
+        'beginCaptures':
+          '1':
+            'name': 'keyword'
+        'end': '$'
+        'patterns': [
+          {
+            'match': ','
+            'name': 'keyword.operator'
+          }
+          {
+            'begin': '"'
+            'end': '"'
+            'name': 'string.quoted.double'
+          }
+          {
+            'match': '[^,\\n]+'
+            'name': 'string'
+          }
+        ]
+      }
+      { # declaration
+        'match': '\\b(COM|DIM|INTEGER|DINTEGER|REAL|FLOAT|SHORT)\\b'
+        'name': 'storage.type'
+      }
+      { # labels_list
+        'begin': '(GOTO |THEN |GOSUB )([A-Z][a-z0-9_]*)(?=,)'
+        'beginCaptures':
+          '1':
+            'name': 'keyword'
+          '2':
+            'name': 'entity.name.section'
+        'end': '$'
+        'patterns': [
+          {
+            'match': '(,)([A-Z][a-z0-9_]*)'
+            'captures':
+              '1':
+                'name': 'keyword.operator'
+              '2':
+                'name': 'entity.name.section'
+          }
+        ]
+      }
+      { # labels
+        'match': '(THEN GOTO |GOTO |THEN |GOSUB |USING REMOTE LISTS |USING )([A-Z][a-z0-9_]*)(?![A-Z])'
+        'captures':
+          '1':
+            'name': 'keyword'
+          '2':
+            'name': 'entity.name.section'
+      }
+      { # labels_definition
+        'match': '^[A-Z][a-z0-9_]*(?=:)'
+        'name': 'entity.name.section'
+      }
+      { #keywords
+        'match': '\\b(DESCRIPTION|IN DATA SET|NO OPERATOR|OPTION BASE|TRANSPARENT|BACKGROUND|DBROLLBACK|DUMP STACK|EXCLUSIVE|POPUP BOX|PREDICATE|RANDOMIZE|REVISION\\$|DBCOMMIT|DBDELETE|DBUNLOCK|DBUPDATE|LASTLINE|MAPPNTR\\$|READONLY|STANDARD|WORKFILE|CHANGES|COMMAND|DBBEGIN|DBCLOSE|ERRMSG\\$|EXTENDS|FCREATE|GETENV\\$|LDSPEC\\$|MAPVOL\\$|PACKFMT|PRINTER|RELEASE|REQUEST|RESTORE|SUBEXIT|TRAILER|TYPEOF\\$|XASSIGN|XUNPACK|ACCEPT|APPEND|ASSIGN|BINCMP|BINIOR|CREATE|CURKEY|CURSOR|DBFIND|DBINFO|DBLOCK|DBOPEN|DEFINE|DETAIL|DROUND|ENABLE|EXPORT|HEADER|LENGTH|LINPUT|NUMREC|PROUND|REMOTE|REPEAT|REPORT|RETURN|RIGHT\\$|ROTATE|SELECT|SIGNAL|STDERR|STDOUT|STRUCT|SYSID\\$|SYSTEM|TASKID|THREAD|TOTALS|UNPACK|UPDATE|XPURGE|BEGIN|BREAK|CLOCK|DATE\\$|DBASE|DBGET|DBPUT|ERRM\\$|ERROR|FIXED|FRACT|GRAND|IMAGE|LABEL|LDISP|LINES|LISTS|MERGE|PAUSE|PRINT|PURGE|REDIM|SHIFT|SLEEP|TIME\\$|TOTAL|TRIM\\$|UNTIL|USING|USRID|WFLEN|WHILE|WIDTH|XPACK|BEEP|CALL|CASE|CHR\\$|DATA|DISP|DRAW|EDIT|ELSE|ERRL|ERRN|EXIT|FIND|FREE|FROM|GRAD|HOLE|LINE|LIST|LOAD|LOOP|LWC\\$|MD5\\$|NEXT|OTHR|PACK|PAGE|PNTR|PPID|READ|RPT\\$|SCAN|SIZE|SORT|STEP|STOP|SYNC|THEN|THIS|TYPE|UPC\\$|VAL\\$|WAIT|WHEN|WITH|YPOS|ABS|ACS|ALL|ASN|ATN|COL|CON|COS|DEG|DEL|DIV|DLG|DLL|END|EXP|FOR|GET|INT|KEY|LEN|LET|LEX|LGT|LIN|LOG|MAT|MAX|MIN|MOD|NEW|NUM|OFF|PID|POS|RAD|RND|ROW|SET|SGN|SIN|SKP|SQR|SUB|TAN|USE|VAL|ZER|AS|BY|DO|IF|IS|ON|PI|TO)'
+        'name': 'keyword'
+      }
+      { # string
+        'begin': '"'
+        'end': '"'
+        'name': 'string.quoted.double'
+      }
+      { # number
+        'match': '\\d+(\\.\\d+){0,1}(E\\d+){0,1}'
+        'name': 'constant.numeric'
+      }
+      { # operator
+        'match': '\\+|-|/|\\*|=|\\[|\\]|;|,|>|<|\\(|\\)|&|\\.|:|\\^'
+        'name': 'keyword.operator'
+      }
+      { # operator_word
+        'match': '\bBINAND|NOT|OR|AND|XOR|EXOR\b'
+        'name': 'keyword.operator'
+      }
+      { # identifier
+        'match': '[A-Z][a-z0-9_]*(?![A-Z])\\${0,1}'
+        'name': 'variable'
+      }
+      { # rem_comment
+        'match': 'REM.*$'
+        'name': 'comment.line'
+      }
+    ]
