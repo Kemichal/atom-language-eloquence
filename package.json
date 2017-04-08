@@ -1,14 +1,15 @@
 {
   "name": "language-eloquence",
   "main": "./lib/language-eloquence",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Syntax highlighting for Eloquence",
-  "activationEvents": ["language-eloquence:toggle"],
+  "activationEvents": [
+    "language-eloquence:toggle"
+  ],
   "repository": "https://github.com/kemichal/atom-language-eloquence",
   "license": "MIT",
   "engines": {
     "atom": ">0.50.0"
   },
-  "dependencies": {
-  }
+  "dependencies": {}
 }
