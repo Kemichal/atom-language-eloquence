@@ -168,14 +168,6 @@
           }
         ]
       }
-      { # labels
-        'match': '(THEN GOTO |GOTO |THEN |GOSUB |USING REMOTE LISTS |USING )([A-Z][a-z0-9_]*)(?![A-Z])'
-        'captures':
-          '1':
-            'name': 'keyword'
-          '2':
-            'name': 'entity.name.section'
-      }
       { # labels_definition
         'match': '^[A-Z][a-z0-9_]*(?=:)'
         'name': 'entity.name.section'
@@ -208,5 +200,13 @@
       { # rem_comment
         'match': 'REM.*$'
         'name': 'comment.line'
+      }
+      { # labels
+        'match': '(THEN GOTO |GOTO |THEN |GOSUB |USING REMOTE LISTS |USING )([A-Z][a-z0-9_]*)(?![A-Z]])'
+        'captures':
+          '1':
+            'name': 'keyword'
+          '2':
+            'name': 'entity.name.section'
       }
     ]
