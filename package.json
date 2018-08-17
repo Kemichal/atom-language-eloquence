@@ -1,7 +1,7 @@
 {
   "name": "language-eloquence",
   "main": "./lib/language-eloquence",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Syntax highlighting for Eloquence",
   "activationEvents": [
     "language-eloquence:toggle"
